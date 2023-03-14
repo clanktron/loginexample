@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+
+const [username, setUsername] = useState('');
+const [password, setPassword] = useState('');
+
+const addPosts = async (username, password) => {
+   await fetch('http://localhost:4000/user', {
+      method: 'POST',
+      headers: {
+         'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({
+         username: username,
+         password: password,
+      }),
+   })
+      .then((data) => console.log(data));
+};
+
+const handleSubmit = (e) => {
+   e.preventDefault();
+   addPosts(username, password);
+};    
+
+return (
+   <div className="app">
+      <div className="add-post-container">
+         <form onSubmit={handleSubmit}>
+            <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <input type="text" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <button type="submit">Add Post</button>
+         </form>
+      </div>
+   </div>
+);
+};
 
 export default App;
